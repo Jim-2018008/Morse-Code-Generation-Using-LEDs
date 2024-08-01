@@ -1,0 +1,257 @@
+
+code.elf:     file format elf32-avr
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .text         0000015c  00000000  00000000  00000054  2**1
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  1 .data         00000000  00800060  00800060  000001b0  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  2 .comment      00000030  00000000  00000000  000001b0  2**0
+                  CONTENTS, READONLY
+  3 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  000001e0  2**2
+                  CONTENTS, READONLY
+  4 .debug_aranges 00000048  00000000  00000000  0000021c  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  5 .debug_info   00000876  00000000  00000000  00000264  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  6 .debug_abbrev 00000607  00000000  00000000  00000ada  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  7 .debug_line   00000322  00000000  00000000  000010e1  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  8 .debug_frame  00000074  00000000  00000000  00001404  2**2
+                  CONTENTS, READONLY, DEBUGGING
+  9 .debug_str    00000339  00000000  00000000  00001478  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 10 .debug_loc    000001ba  00000000  00000000  000017b1  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 11 .debug_ranges 00000038  00000000  00000000  0000196b  2**0
+                  CONTENTS, READONLY, DEBUGGING
+
+Disassembly of section .text:
+
+00000000 <__vectors>:
+   0:	0c 94 2a 00 	jmp	0x54	; 0x54 <__ctors_end>
+   4:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+   8:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+   c:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  10:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  14:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  18:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  1c:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  20:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  24:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  28:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  2c:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  30:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  34:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  38:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  3c:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  40:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  44:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  48:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  4c:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  50:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+
+00000054 <__ctors_end>:
+  54:	11 24       	eor	r1, r1
+  56:	1f be       	out	0x3f, r1	; 63
+  58:	cf e5       	ldi	r28, 0x5F	; 95
+  5a:	d8 e0       	ldi	r29, 0x08	; 8
+  5c:	de bf       	out	0x3e, r29	; 62
+  5e:	cd bf       	out	0x3d, r28	; 61
+  60:	0e 94 80 00 	call	0x100	; 0x100 <main>
+  64:	0c 94 ac 00 	jmp	0x158	; 0x158 <_exit>
+
+00000068 <__bad_interrupt>:
+  68:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
+
+0000006c <LED_On>:
+#include <avr/io.h>
+#include <util/delay.h>
+
+// Function to turn on an LED for a specified duration
+void LED_On(int LED, int duration) {
+	if (duration < 0) {
+  6c:	77 23       	and	r23, r23
+  6e:	4c f1       	brlt	.+82     	; 0xc2 <LED_On+0x56>
+		return; // If duration is negative, exit the function
+	}
+
+	PORTA |= (1 << LED); // Turn on LED
+  70:	4b b3       	in	r20, 0x1b	; 27
+  72:	21 e0       	ldi	r18, 0x01	; 1
+  74:	30 e0       	ldi	r19, 0x00	; 0
+  76:	f9 01       	movw	r30, r18
+  78:	02 c0       	rjmp	.+4      	; 0x7e <LED_On+0x12>
+  7a:	ee 0f       	add	r30, r30
+  7c:	ff 1f       	adc	r31, r31
+  7e:	8a 95       	dec	r24
+  80:	e2 f7       	brpl	.-8      	; 0x7a <LED_On+0xe>
+  82:	cf 01       	movw	r24, r30
+  84:	24 2f       	mov	r18, r20
+  86:	2e 2b       	or	r18, r30
+  88:	2b bb       	out	0x1b, r18	; 27
+
+	while (duration > 0) {
+  8a:	0b c0       	rjmp	.+22     	; 0xa2 <LED_On+0x36>
+	#else
+		//round up by default
+		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
+	#endif
+
+	__builtin_avr_delay_cycles(__ticks_dc);
+  8c:	ff ef       	ldi	r31, 0xFF	; 255
+  8e:	24 e3       	ldi	r18, 0x34	; 52
+  90:	3c e0       	ldi	r19, 0x0C	; 12
+  92:	f1 50       	subi	r31, 0x01	; 1
+  94:	20 40       	sbci	r18, 0x00	; 0
+  96:	30 40       	sbci	r19, 0x00	; 0
+  98:	e1 f7       	brne	.-8      	; 0x92 <LED_On+0x26>
+  9a:	00 c0       	rjmp	.+0      	; 0x9c <LED_On+0x30>
+  9c:	00 00       	nop
+		_delay_ms(500); // Wait for 500 milliseconds
+		duration--;
+  9e:	61 50       	subi	r22, 0x01	; 1
+  a0:	71 09       	sbc	r23, r1
+		return; // If duration is negative, exit the function
+	}
+
+	PORTA |= (1 << LED); // Turn on LED
+
+	while (duration > 0) {
+  a2:	16 16       	cp	r1, r22
+  a4:	17 06       	cpc	r1, r23
+  a6:	94 f3       	brlt	.-28     	; 0x8c <LED_On+0x20>
+		_delay_ms(500); // Wait for 500 milliseconds
+		duration--;
+	}
+
+	PORTA &= ~(1 << LED); // Turn off LED
+  a8:	9b b3       	in	r25, 0x1b	; 27
+  aa:	80 95       	com	r24
+  ac:	89 23       	and	r24, r25
+  ae:	8b bb       	out	0x1b, r24	; 27
+  b0:	4f ef       	ldi	r20, 0xFF	; 255
+  b2:	84 e3       	ldi	r24, 0x34	; 52
+  b4:	9c e0       	ldi	r25, 0x0C	; 12
+  b6:	41 50       	subi	r20, 0x01	; 1
+  b8:	80 40       	sbci	r24, 0x00	; 0
+  ba:	90 40       	sbci	r25, 0x00	; 0
+  bc:	e1 f7       	brne	.-8      	; 0xb6 <LED_On+0x4a>
+  be:	00 c0       	rjmp	.+0      	; 0xc0 <LED_On+0x54>
+  c0:	00 00       	nop
+  c2:	08 95       	ret
+
+000000c4 <Dot>:
+	_delay_ms(500); // Gap between signals (500 milliseconds)
+}
+// Function to transmit a dot
+void Dot(int LED) {
+	LED_On(LED, 1); // Dot duration is 1 unit
+  c4:	61 e0       	ldi	r22, 0x01	; 1
+  c6:	70 e0       	ldi	r23, 0x00	; 0
+  c8:	0e 94 36 00 	call	0x6c	; 0x6c <LED_On>
+  cc:	08 95       	ret
+
+000000ce <Dash>:
+}
+
+// Function to transmit a dash
+void Dash(int LED) {
+	LED_On(LED, 3); // Dash duration is 3 units
+  ce:	63 e0       	ldi	r22, 0x03	; 3
+  d0:	70 e0       	ldi	r23, 0x00	; 0
+  d2:	0e 94 36 00 	call	0x6c	; 0x6c <LED_On>
+  d6:	08 95       	ret
+
+000000d8 <CharGap>:
+  d8:	2f ef       	ldi	r18, 0xFF	; 255
+  da:	8e e9       	ldi	r24, 0x9E	; 158
+  dc:	94 e2       	ldi	r25, 0x24	; 36
+  de:	21 50       	subi	r18, 0x01	; 1
+  e0:	80 40       	sbci	r24, 0x00	; 0
+  e2:	90 40       	sbci	r25, 0x00	; 0
+  e4:	e1 f7       	brne	.-8      	; 0xde <CharGap+0x6>
+  e6:	00 c0       	rjmp	.+0      	; 0xe8 <CharGap+0x10>
+  e8:	00 00       	nop
+  ea:	08 95       	ret
+
+000000ec <WordGap>:
+  ec:	2f ef       	ldi	r18, 0xFF	; 255
+  ee:	82 e7       	ldi	r24, 0x72	; 114
+  f0:	95 e5       	ldi	r25, 0x55	; 85
+  f2:	21 50       	subi	r18, 0x01	; 1
+  f4:	80 40       	sbci	r24, 0x00	; 0
+  f6:	90 40       	sbci	r25, 0x00	; 0
+  f8:	e1 f7       	brne	.-8      	; 0xf2 <WordGap+0x6>
+  fa:	00 c0       	rjmp	.+0      	; 0xfc <WordGap+0x10>
+  fc:	00 00       	nop
+  fe:	08 95       	ret
+
+00000100 <main>:
+	_delay_ms(3500); // Gap between words is 7 units (3500 ms)
+}
+
+int main() {
+	// Initialize PORTA for LEDs
+	DDRA = 0b11111111; // Set PORTA as output
+ 100:	8f ef       	ldi	r24, 0xFF	; 255
+ 102:	8a bb       	out	0x1a, r24	; 26
+	PORTA=0x00; // Initializing the PORTA with 0
+ 104:	1b ba       	out	0x1b, r1	; 27
+	while (1) {
+		// Transmit Morse code for "I"
+		Dot(0); // LED1 for "I"
+ 106:	80 e0       	ldi	r24, 0x00	; 0
+ 108:	90 e0       	ldi	r25, 0x00	; 0
+ 10a:	0e 94 62 00 	call	0xc4	; 0xc4 <Dot>
+		Dot(1); // LED2 for "I"
+ 10e:	81 e0       	ldi	r24, 0x01	; 1
+ 110:	90 e0       	ldi	r25, 0x00	; 0
+ 112:	0e 94 62 00 	call	0xc4	; 0xc4 <Dot>
+		WordGap(); // Gap between words
+ 116:	0e 94 76 00 	call	0xec	; 0xec <WordGap>
+
+		// Transmit Morse code for "s"
+		Dot(0); // LED1 for "s"
+ 11a:	80 e0       	ldi	r24, 0x00	; 0
+ 11c:	90 e0       	ldi	r25, 0x00	; 0
+ 11e:	0e 94 62 00 	call	0xc4	; 0xc4 <Dot>
+		Dot(1); // LED2 for "s"
+ 122:	81 e0       	ldi	r24, 0x01	; 1
+ 124:	90 e0       	ldi	r25, 0x00	; 0
+ 126:	0e 94 62 00 	call	0xc4	; 0xc4 <Dot>
+		Dot(2); // LED3 for "s"
+ 12a:	82 e0       	ldi	r24, 0x02	; 2
+ 12c:	90 e0       	ldi	r25, 0x00	; 0
+ 12e:	0e 94 62 00 	call	0xc4	; 0xc4 <Dot>
+		CharGap(); // Gap between characters
+ 132:	0e 94 6c 00 	call	0xd8	; 0xd8 <CharGap>
+
+		// Transmit Morse code for "i"
+		Dot(0); // LED1 for "i"
+ 136:	80 e0       	ldi	r24, 0x00	; 0
+ 138:	90 e0       	ldi	r25, 0x00	; 0
+ 13a:	0e 94 62 00 	call	0xc4	; 0xc4 <Dot>
+		Dot(1); // LED2 for "i"
+ 13e:	81 e0       	ldi	r24, 0x01	; 1
+ 140:	90 e0       	ldi	r25, 0x00	; 0
+ 142:	0e 94 62 00 	call	0xc4	; 0xc4 <Dot>
+		CharGap(); // Gap between characters
+ 146:	0e 94 6c 00 	call	0xd8	; 0xd8 <CharGap>
+
+		// Transmit Morse code for "t"
+		Dash(0); // LED1 for "t"
+ 14a:	80 e0       	ldi	r24, 0x00	; 0
+ 14c:	90 e0       	ldi	r25, 0x00	; 0
+ 14e:	0e 94 67 00 	call	0xce	; 0xce <Dash>
+		WordGap(); // Gap between words
+ 152:	0e 94 76 00 	call	0xec	; 0xec <WordGap>
+ 156:	d7 cf       	rjmp	.-82     	; 0x106 <main+0x6>
+
+00000158 <_exit>:
+ 158:	f8 94       	cli
+
+0000015a <__stop_program>:
+ 15a:	ff cf       	rjmp	.-2      	; 0x15a <__stop_program>
